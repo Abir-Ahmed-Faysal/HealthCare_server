@@ -6,10 +6,10 @@ const router = express.Router()
 
 
 
-router.get("/",hitApi, specialtyController.createSpecialty)
+router.get("/",hitApi, specialtyController.getAllSpecialty)
 router.post("/",hitApi, specialtyController.createSpecialty)
-router.patch("/:id",hitApi, specialtyController.createSpecialty)
-router.delete("/:id",hitApi, specialtyController.createSpecialty)
+router.patch("/:id",hitApi, specialtyController.updateSpecialty)
+router.delete("/:id",hitApi, specialtyController.deleteSpecialty)
 
 
 

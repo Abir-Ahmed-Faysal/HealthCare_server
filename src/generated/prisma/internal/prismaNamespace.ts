@@ -519,6 +519,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const SpecialtyScalarFieldEnum = {
   id: 'id',
+  icon: 'icon',
   title: 'title',
   description: 'description',
   isDelete: 'isDelete',
