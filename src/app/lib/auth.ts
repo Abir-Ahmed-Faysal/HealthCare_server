@@ -8,7 +8,7 @@ import { Role, UserStatus } from "../../generated/prisma/enums";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
-        provider: "postgresql", // or "mysql", "postgresql", ...etc
+        provider: "postgresql",
     }),
     emailAndPassword: {
         enabled: true
@@ -30,7 +30,7 @@ export const auth = betterAuth({
             isDeleted: {
                 type: "boolean",
                 required: true,
-                defaultValue: "false"
+                defaultValue: false
             }
         },
         deletedAt: {
@@ -50,7 +50,15 @@ export const auth = betterAuth({
 
 
 
-    }
+    },
+
+
+    // trustedOrigins: [process.env.FRONTEND_URL || "http://localhost:5000"],
+
+    // advanced: {
+    //     disableCSRFCheck: true
+    // }
+
 });
 
 

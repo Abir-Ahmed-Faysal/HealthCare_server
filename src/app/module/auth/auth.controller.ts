@@ -3,6 +3,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { authService } from "./auth.service";
 import { sendRes } from "../../shared/sendRes";
 
+
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
     const { name, email, password } = req.body
     const result = await authService.registerPatient({ name, email, password })
@@ -11,9 +12,18 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+const login = catchAsync(async (req: Request, res: Response) => {
+    console.log("her ei the req body", req.body);
+    const { email, password } = req.body
+    const result = await authService.login({ email, password })
+
+    sendRes(res, { statusCode: 200, message: "login successfully", success: true, data: result })
+})
+
+
 
 
 
 export const authController = {
-    registerPatient
+    registerPatient, login
 }

@@ -1,8 +1,15 @@
+import { UserStatus } from "../../../generated/prisma/enums";
 import auth from "../../lib/auth";
+
 
 
 interface IRegisterPatientPayload {
     name: string;
+    email: string,
+    password: string
+}
+
+interface ILoginPayload {
     email: string,
     password: string
 }
@@ -25,7 +32,6 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
         throw new Error("Failed to register user")
     }
 
-
     //TODO : fill up  patient schema with transation session
 
     // const patient = prisma.patient .$transaction(async(tx)=>{
@@ -34,11 +40,34 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 
     // })
 
-
-    return data?.user
+    return data
 }
 
 
 
+const login= async (payload: ILoginPayload) => {
+    const { email, password } = payload
 
-export const authService = { registerPatient }
+    const data = await auth.api.signInEmail({
+        body: {
+            email,
+            password
+        }
+    })
+
+
+    if (data.user.isDeleted) {
+        throw new Error("user deleted")
+    }
+
+    if(data.user.status===UserStatus.BLOCKED){
+        throw new Error ("login blocked")
+    }
+
+    return data?.user
+
+}
+
+
+
+export const authService = { registerPatient,  login}
