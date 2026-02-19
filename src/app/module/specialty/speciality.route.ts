@@ -1,6 +1,6 @@
 import express from 'express';
 import { specialtyController } from './speciality.controller';
-import { hitApi } from '../middleware/hitApi';
+import { hitApi } from '../../middleware/hitApi';
 
 const router = express.Router()
 
