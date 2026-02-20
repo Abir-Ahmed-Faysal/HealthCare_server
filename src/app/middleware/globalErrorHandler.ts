@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { envVars } from "../../env";
+import { StatusCodes } from "http-status-codes";
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,7 +13,7 @@ export const globalErrorHandler = (error: any, req: Request, res: Response, _: N
 
 
     // eslint-disable-next-line prefer-const
-    let statusCode: number = 500
+    let statusCode: number = StatusCodes.INTERNAL_SERVER_ERROR
     // eslint-disable-next-line prefer-const
     let message: string = "internal Server error"
 

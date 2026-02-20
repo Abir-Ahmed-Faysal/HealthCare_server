@@ -1,5 +1,6 @@
-import express, { Application} from "express";
+import express, { Application } from "express";
 import { indexRoutes } from "./app/routes";
+import { notFound } from "./app/middleware/notFoud";
 
 
 
@@ -15,12 +16,12 @@ app.use(express.json());
 
 // Basic route
 
-app.use("/api/v1",indexRoutes )
+app.use("/api/v1", indexRoutes)
 
 
 
 
-app.use()
+app.use(notFound)
 
 
 export default app

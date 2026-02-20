@@ -19,6 +19,13 @@ export const auth = betterAuth({
         additionalFields: {
 
 
+        needPasswordChange: {
+            type: "boolean",
+            required: true,
+            default: false
+        }
+,
+
             role: {
                 type: "string",
                 required: true, defaultValue: Role.PATIENT
@@ -35,17 +42,10 @@ export const auth = betterAuth({
             }
         },
         deletedAt: {
-            type: "boolean",
+            type: "date",
             required: false,
             defaultValue: null
         },
-
-        needPasswordChange: {
-            type: "boolean",
-            required: true,
-            default: false
-        }
-
 
 
 

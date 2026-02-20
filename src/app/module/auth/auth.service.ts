@@ -34,7 +34,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
         throw new Error("Failed to register user")
     }
 
-    //TODO : fill up  patient schema with transation session
+    
 
     try {
         const patient = await prisma.$transaction(async (tx) => {
