@@ -1,5 +1,6 @@
 import { UserStatus } from "../../../generated/prisma/enums";
 import auth from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
 
 
 
@@ -7,6 +8,7 @@ interface IRegisterPatientPayload {
     name: string;
     email: string,
     password: string
+
 }
 
 interface ILoginPayload {
@@ -34,18 +36,36 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 
     //TODO : fill up  patient schema with transation session
 
-    // const patient = prisma.patient .$transaction(async(tx)=>{
+    try {
+        const patient = await prisma.$transaction(async (tx) => {
 
-    // const patient = await tx.create
+            const patientTx = await tx.patient.create({
+                data: {
+                    userId: data.user.id,
+                    name: payload.name,
+                    email: payload.email
+                }
+            })
 
-    // })
+            return patientTx
+        })
 
-    return data
+        return { ...data, patient }
+    } catch (error) {
+        console.log("transition error:", error);
+
+        await prisma.user.delete({
+            where: {
+                id: data.user.id
+            }
+        })
+        throw error
+    }
 }
 
 
 
-const login= async (payload: ILoginPayload) => {
+const login = async (payload: ILoginPayload) => {
     const { email, password } = payload
 
     const data = await auth.api.signInEmail({
@@ -60,8 +80,8 @@ const login= async (payload: ILoginPayload) => {
         throw new Error("user deleted")
     }
 
-    if(data.user.status===UserStatus.BLOCKED){
-        throw new Error ("login blocked")
+    if (data.user.status === UserStatus.BLOCKED) {
+        throw new Error("login blocked")
     }
 
     return data?.user
@@ -70,4 +90,4 @@ const login= async (payload: ILoginPayload) => {
 
 
 
-export const authService = { registerPatient,  login}
+export const authService = { registerPatient, login }

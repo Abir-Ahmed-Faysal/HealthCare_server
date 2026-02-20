@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application} from "express";
 import { indexRoutes } from "./app/routes";
 
 
@@ -16,6 +16,11 @@ app.use(express.json());
 // Basic route
 
 app.use("/api/v1",indexRoutes )
+
+
+
+
+app.use()
 
 
 export default app
