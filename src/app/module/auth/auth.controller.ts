@@ -14,7 +14,6 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
 
 
 const login = catchAsync(async (req: Request, res: Response) => {
-    console.log("her ei the req body", req.body);
     const { email, password } = req.body
     const result = await authService.login({ email, password })
 

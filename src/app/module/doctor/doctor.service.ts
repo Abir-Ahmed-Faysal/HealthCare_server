@@ -30,7 +30,6 @@ const getDoctor = async (id: string) => {
         }
     })
     return result
-
 }
 
 

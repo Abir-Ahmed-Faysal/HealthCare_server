@@ -47,7 +47,7 @@ export interface ICreateDoctorPayload {
     "specialties": [
         "019c7ba6-bd42-72db-a945-42f988f3eb5d"
     ],
-    }}
+    }
 
 
 

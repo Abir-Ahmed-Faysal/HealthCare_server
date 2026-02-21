@@ -1,4 +1,7 @@
 import dotenv from 'dotenv';
+import AppError from '../errorHelpers/AppError';
+import { StatusCodes } from 'http-status-codes';
+
 dotenv.config();
 
 
@@ -25,7 +28,7 @@ const loadEnvVariable = (): EnvConfig => {
 
     requiredEnvVariables.forEach((envVar) => {
         if (!process.env[envVar]) {
-            throw new Error(`Environment variable ${envVar} is required but on set in .env file.`)
+            throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR,`Environment variable ${envVar} is required but on set in .env file.`)
         }
     })
 

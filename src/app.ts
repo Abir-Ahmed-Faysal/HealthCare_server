@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import { indexRoutes } from "./app/routes";
 import { notFound } from "./app/middleware/notFoud";
+import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 
 
 
@@ -17,6 +18,10 @@ app.use(express.json());
 // Basic route
 
 app.use("/api/v1", indexRoutes)
+
+
+
+app.use(globalErrorHandler)
 
 
 

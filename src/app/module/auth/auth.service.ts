@@ -25,6 +25,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
             name,
             email,
             password,
+            needPasswordChange:false
 
         }
     })
