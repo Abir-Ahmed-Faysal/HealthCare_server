@@ -39,7 +39,7 @@ const getDoctor = async (id: string) => {
 
 
 //     const result = await prisma.doctor.findUnique({ where: { id } })
-//     if (!result) throw new Error("no doctor found")
+//     if (!result) throw new AppError(,"no doctor found")
 
 
 

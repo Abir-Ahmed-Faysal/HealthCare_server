@@ -32,7 +32,8 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, _: Nex
         message = zodError.message
         errorSources = [...zodError.errorSources]
         stack = err.stack
-    }else if(err instanceof AppError){
+    }else if(err instanceof AppError){    
+        message = err.message
         statusCode = err.statusCode;
         errorSources = [{
             path: "",

@@ -3,9 +3,13 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { Role, UserStatus } from "../../generated/prisma/enums";
 import { envVars } from "../config/env";
+import { StringValue }from "ms";
+import { toSeconds } from "../utilities/duration";
 
 
-// If your Prisma file is located elsewhere, you can change the path
+
+
+
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -19,12 +23,12 @@ export const auth = betterAuth({
         additionalFields: {
 
 
-        needPasswordChange: {
-            type: "boolean",
-            required: true,
-            default: false
-        }
-,
+            needPasswordChange: {
+                type: "boolean",
+                required: true,
+                default: false
+            }
+            ,
 
             role: {
                 type: "string",
@@ -46,11 +50,13 @@ export const auth = betterAuth({
             required: false,
             defaultValue: null
         },
-
-
-
-
-
+    }, session: {
+        expiresIn:toSeconds(envVars.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as StringValue  ),
+        updateAge: toSeconds(envVars.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as  StringValue ),
+        cookieCache: {
+            enabled: true,
+            maxAge: toSeconds(envVars.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as  StringValue)/1000
+        }
     },
 
 

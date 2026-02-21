@@ -1,4 +1,6 @@
+import { StatusCodes } from "http-status-codes";
 import { Role, Specialty } from "../../../generated/prisma/client";
+import AppError from "../../errorHelpers/AppError";
 import auth from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { ICreateDoctorPayload } from "./user.Interface";
@@ -6,11 +8,6 @@ import { ICreateDoctorPayload } from "./user.Interface";
 const createDoctor = async (payload: ICreateDoctorPayload) => {
 
     const specialties: Specialty[] = []
-
-
-    if (payload.specialties.length === 0) {
-        throw new Error("please select at least one specialty")
-    }
 
 
     for (const specialtyId of payload.specialties) {
@@ -21,7 +18,7 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
         })
 
         if (!specialty) {
-            throw new Error("no specialty found")
+            throw new AppError(StatusCodes.NOT_FOUND,"no specialty found")
         }
         specialties.push(specialty)
     }
@@ -33,7 +30,7 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
     })
 
     if (user) {
-        throw new Error("user already exist")
+        throw new AppError(StatusCodes.CONFLICT,"user already exist")
     }
 
 
@@ -52,7 +49,7 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
 
 
     if (!userData.user) {
-        throw new Error("Failed to register user for doctor")
+        throw new AppError(StatusCodes.BAD_REQUEST,"Failed to register user for doctor")
     }
 
 
