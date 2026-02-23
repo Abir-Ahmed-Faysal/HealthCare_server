@@ -11,7 +11,7 @@ export interface ICreateDoctorPayload {
         profilePhoto?: string;
         address?: string;
         contactNumber?: string;
-        registrationNUmber: string;
+        registrationNumber: string;
         experience?: number;
         gender: Gender;
         appointmentFee: number;
@@ -23,32 +23,24 @@ export interface ICreateDoctorPayload {
 }
 
 
+export interface ICreateAdmin {
+  password: string;
+  admin: {
+    name: string;
+    email: string;
+    profilePhoto?: string;
+    contactNumber: string;
+  };
+}
 
-/**
- make a json data for posting new doctor
- */
 /*
+make a json data for the icreate admin
 {
-    "password": "12345678@",
-    "doctor": {
-        "name": "Md Faysal Ahmed",
-        "email": "faysal@gmail.com",
-        "profilePhoto": "http://example.com",
-        "address": "Satkhira,Khulna,Bangladesh",
-        "contactNumber": "01779161032",
-        "registrationNUmber": "Reg-1234",
-        "experience": 5,
-        "gender": "MALE",
-        "appointmentFee": 1000,
-        "qualification": "MBBS, MD, MS, FRCOG, FACC, FRCP,  FRCS, FRCP(GP)",
-        "currentWorkingPlace": "Dhaka Medical College",
-        "designation": "Senior Doctor"
-    },
-    "specialties": [
-        "019c7ba6-bd42-72db-a945-42f988f3eb5d"
-    ],
-    }
-
-
-
- */
+    "password": "string",
+    "admin": {
+        "name": "string",
+        "email": "string",
+        "profilePhoto": "string",
+        "contactNumber": "string"
+    }}
+*/ 

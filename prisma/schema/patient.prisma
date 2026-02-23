@@ -20,4 +20,9 @@ model Patient {
 
 
     @@map("patient")
+    appointments Appointment[]
+    reviews Review[]
+    patientHealthData Patient_Health_Data?
+    medicalReports MedicalReport[]
+    prescriptions Prescription[]
 }

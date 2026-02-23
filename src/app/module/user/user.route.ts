@@ -1,7 +1,7 @@
-import {  Router } from "express";
+import { Router } from "express";
 import { userController } from "./user.controller";
 import { validateRequest } from "../../middleware/validataionRequest";
-import { createDoctorZodSchema } from "./userRequest.validation";
+import { UserValidation } from "./userRequest.validation";
 
 
 
@@ -13,9 +13,15 @@ import { createDoctorZodSchema } from "./userRequest.validation";
 
 const router = Router()
 
-router.post("/create-doctor",validateRequest(createDoctorZodSchema), userController.createDoctor)
-// router.post("/create-admin", userController.)
-// router.post("/create-super-admin", userController.)
+router.post("/create-doctor",
+    //  authCheck(Role.SUPER_ADMIN, Role.ADMIN),
+    validateRequest(UserValidation.createDoctorValidationZodSchema), userController.createDoctor)
+
+
+router.post("/create-admin", validateRequest(UserValidation.createAdminValidationSchema), userController.createAdmin)
+
+
+router.post("/create-super-admin", validateRequest(UserValidation.createAdminValidationSchema), userController.createSuperAdmin)
 
 
 

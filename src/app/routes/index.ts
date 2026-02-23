@@ -3,6 +3,8 @@ import { SpecialtyRouter } from '../module/specialty/speciality.route';
 import { authRouter } from '../module/auth/auth.route';
 import { userRoutes } from '../module/user/user.route';
 import { doctorRoutes } from '../module/doctor/doctor.routes';
+import { superAdminRoutes } from '../superAdmin/superAdmin.routes';
+import { adminRoutes } from '../admin/admin.routes';
 
 
 const router = express.Router()
@@ -13,6 +15,9 @@ router.use("/auth", authRouter)
 router.use("/user", userRoutes)
 router.use("/specialty", SpecialtyRouter)
 router.use("/doctors", doctorRoutes)
+router.use("/admins", adminRoutes)
+router.use("/super-admins", superAdminRoutes)
+
 
 
 export const indexRoutes = router

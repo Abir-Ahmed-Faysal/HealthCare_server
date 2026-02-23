@@ -8,12 +8,22 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Admin'
+export type * from './models/Appointment'
 export type * from './models/User'
 export type * from './models/Session'
 export type * from './models/Account'
 export type * from './models/Verification'
 export type * from './models/Doctor'
+export type * from './models/MedicalReport'
 export type * from './models/Patient'
+export type * from './models/Patient_Health_Data'
+export type * from './models/Payment'
+export type * from './models/Prescription'
+export type * from './models/Review'
+export type * from './models/Schedule'
+export type * from './models/DoctorSchedule'
 export type * from './models/Specialty'
 export type * from './models/DoctorSpecialty'
+export type * from './models/Super_Admin'
 export type * from './commonInputTypes'
