@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { sendRes } from "../shared/sendRes";
 import { adminService } from "./SuperAdmin.service";
 import { catchAsync } from "../shared/catchAsync";
+import { IUserRequest } from "../interfaces/IUserRequest";
 
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
     const result = await adminService.getAllAdmins();
@@ -31,7 +32,9 @@ const getAdmin = catchAsync(async (req: Request, res: Response) => {
 
 
 const updateAdmin = catchAsync(async (req: Request, res: Response) => {
-    const result = await adminService.updateAdmin(req.params.id as string, req.body);
+const {user}= req
+
+    const result = await adminService.updateAdmin(req.params.id as string,user as IUserRequest, req.body);
 
     return sendRes(res, {
         statusCode: StatusCodes.OK,
@@ -44,7 +47,10 @@ const updateAdmin = catchAsync(async (req: Request, res: Response) => {
 
 
 const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
-    const result = await adminService.deleteAdmin(req.params.id as string);
+    const { user } = req
+    const result = await adminService.deleteAdmin(req.params.id as string, user as IUserRequest);
+
+
 
     return sendRes(res, {
         statusCode: StatusCodes.OK,

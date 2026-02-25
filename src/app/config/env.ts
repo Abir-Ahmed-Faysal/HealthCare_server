@@ -21,6 +21,18 @@ interface EnvConfig {
     BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: string;
     SUPER_ADMIN_SECRET: string;
     SUPER_ADMIN_TOKEN_EXPIRES_IN: string;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+    GOOGLE_CALLBACK_URL:string;
+    EMAIL_SENDER: {
+        EMAIL_SENDER_SMTP_USER: string;
+        EMAIL_SENDER_SMTP_PASS: string;
+        EMAIL_SENDER_SMTP_HOST: string;
+        EMAIL_SENDER_SMTP_PORT: string;
+        EMAIL_SENDER_SMTP_FROM: string;
+
+    }
+
 }
 
 
@@ -42,7 +54,16 @@ const loadEnvVariable = (): EnvConfig => {
         'BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN',
         'BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE',
         'SUPER_ADMIN_SECRET',
-        'SUPER_ADMIN_TOKEN_EXPIRES_IN']
+        'SUPER_ADMIN_TOKEN_EXPIRES_IN',
+        'EMAIL_SENDER_SMTP_USER',
+        'EMAIL_SENDER_SMTP_PASS',
+        'EMAIL_SENDER_SMTP_HOST',
+        'EMAIL_SENDER_SMTP_PORT',
+        'EMAIL_SENDER_SMTP_FROM',
+        'GOOGLE_CLIENT_ID',
+        'GOOGLE_CLIENT_SECRET',
+        'GOOGLE_CALLBACK_URL',
+    ]
 
     requiredEnvVariables.forEach((envVar) => {
         if (!process.env[envVar]) {
@@ -66,6 +87,16 @@ const loadEnvVariable = (): EnvConfig => {
         BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: process.env.BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE as string,
         SUPER_ADMIN_SECRET: process.env.SUPER_ADMIN_SECRET as string,
         SUPER_ADMIN_TOKEN_EXPIRES_IN: process.env.SUPER_ADMIN_TOKEN_EXPIRES_IN as string,
+        GOOGLE_CALLBACK_URL:process.env.GOOGLE_CALLBACK_URL as string,
+        EMAIL_SENDER: {
+            EMAIL_SENDER_SMTP_USER: process.env.EMAIL_SENDER_SMTP_USER as string,
+            EMAIL_SENDER_SMTP_PASS: process.env.EMAIL_SENDER_SMTP_PASS as string,
+            EMAIL_SENDER_SMTP_HOST: process.env.EMAIL_SENDER_SMTP_HOST as string,
+            EMAIL_SENDER_SMTP_PORT: process.env.EMAIL_SENDER_SMTP_PORT as string,
+            EMAIL_SENDER_SMTP_FROM: process.env.EMAIL_SENDER_SMTP_FROM as string
+        },
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
     }
 }
 

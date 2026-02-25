@@ -10,8 +10,11 @@ import { prisma } from "../lib/prisma";
 
 export const authCheck = (...authRoles: Role[]) => {
     return (async (req: Request, res: Response, next: NextFunction) => {
+  
         try {
             const sessionToken = cookieUtils.getCookie(req, "better-auth.Session_token")
+
+         
 
             if (!sessionToken) return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: "You are not authorized to access this route" });
 
@@ -63,6 +66,14 @@ export const authCheck = (...authRoles: Role[]) => {
                         throw new AppError(StatusCodes.FORBIDDEN, "you are not authorized to access this route")
                     }
 
+
+                    req.user = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                    }
+
                 }
 
                 // ! mentor does not do this check
@@ -83,6 +94,8 @@ export const authCheck = (...authRoles: Role[]) => {
             if (!verifyAccessToken.success) {
                 return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: "You are not authorized to access this route" });
             }
+
+
 
 
             next()

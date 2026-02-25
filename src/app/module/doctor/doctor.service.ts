@@ -53,7 +53,7 @@ const getAllDoctors = async () => {
 
 
 const getDoctorById = async (id: string) => {
-  const doctor = await prisma.doctor.findUnique({
+  const doctor = await prisma.doctor.findFirst({
     where: {
       id,
       isDeleted: false,
@@ -79,9 +79,10 @@ const getDoctorById = async (id: string) => {
 };
 
 
+
 const updateDoctor = async (id: string, payload: IUpdateDoctorPayload) => {
   // Check if doctor exists and not deleted
-  const existingDoctor = await prisma.doctor.findUnique({
+  const existingDoctor = await prisma.doctor.findFirst({
     where: { id, isDeleted: false },
   });
 
@@ -134,16 +135,16 @@ const updateDoctor = async (id: string, payload: IUpdateDoctorPayload) => {
       }
     }
   })
+
+
   const doctor = await getDoctorById(id)
   return doctor
 };
 
 
 
-
-
 const deleteDoctor = async (id: string) => {
-  const exists = await prisma.doctor.findUnique({
+  const exists = await prisma.doctor.findFirst({
     where: {
       id,
       isDeleted: false
@@ -155,7 +156,7 @@ const deleteDoctor = async (id: string) => {
   }
 
 
-  const data = await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx) => {
 
     await tx.user.update({
       where: {
@@ -167,7 +168,7 @@ const deleteDoctor = async (id: string) => {
       }
     })
 
-    const doctorData = await tx.doctor.update({
+    await tx.doctor.update({
       where: {
         id
       },
@@ -177,11 +178,22 @@ const deleteDoctor = async (id: string) => {
       }
     })
 
-    return doctorData
-  })
-  return data
-}
+    await tx.session.deleteMany({
+      where: {
+        userId: exists.userId
+      }
+    })
 
+
+    await tx.doctorSpecialty.deleteMany({
+      where: {
+        doctorId: id
+      }
+    })
+  })
+
+  return { message: "Doctor deleted successfully" }
+}
 
 
 

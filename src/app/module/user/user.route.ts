@@ -22,6 +22,7 @@ router.post("/create-admin", validateRequest(UserValidation.createAdminValidatio
 
 
 router.post("/create-super-admin", validateRequest(UserValidation.createAdminValidationSchema), userController.createSuperAdmin)
+router.post("/create-super-admin", validateRequest(UserValidation.createAdminValidationSchema), userController.createSuperAdmin)
 
 
 

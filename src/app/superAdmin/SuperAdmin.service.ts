@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { prisma } from "../lib/prisma";
 import AppError from "../errorHelpers/AppError";
 import { IAdminUpdatePayload } from "./superAdmin.interface";
+import { IUserRequest } from "../interfaces/IUserRequest";
 
 
 
@@ -46,7 +47,11 @@ const getAdminById = async (id: string) => {
 
 
 
-const updateAdmin = async (id: string, payload: IAdminUpdatePayload) => {
+const updateAdmin = async (id: string, user: IUserRequest, payload: IAdminUpdatePayload) => {
+  if (user.userId === id) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "You won't update your super admin Profile");
+  }
+
   const existingAdmin = await prisma.admin.findFirst({
     where: { id, isDeleted: false },
   });
@@ -73,7 +78,11 @@ const updateAdmin = async (id: string, payload: IAdminUpdatePayload) => {
 
 
 
-const deleteAdmin = async (id: string) => {
+const deleteAdmin = async (id: string, user: IUserRequest) => {
+  if (user.userId === id) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "You won't delete your super admin Profile");
+  }
+
   const exists = await prisma.admin.findFirst({
     where: {
       id,

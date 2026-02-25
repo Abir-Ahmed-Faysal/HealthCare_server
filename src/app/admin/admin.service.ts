@@ -85,7 +85,7 @@ const deleteAdmin = async (id: string) => {
     throw new AppError(StatusCodes.NOT_FOUND, "admin not found");
   }
 
-  const data = await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx) => {
     await tx.user.update({
       where: {
         id: exists.userId,
@@ -96,7 +96,7 @@ const deleteAdmin = async (id: string) => {
       },
     });
 
-    const adminData = await tx.admin.update({
+   await tx.admin.update({
       where: {
         id,
       },
@@ -106,10 +106,14 @@ const deleteAdmin = async (id: string) => {
       },
     });
 
-    return adminData;
+await tx.session.deleteMany({
+  where:{
+    userId:id
+  }
+})
   });
-
-  return data;
+  
+  return { message: "admin data deleted successfully" };
 };
 
 
