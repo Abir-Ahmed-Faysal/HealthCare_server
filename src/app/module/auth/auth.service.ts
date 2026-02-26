@@ -426,7 +426,9 @@ const resetPassword = async (email: string, otp: string, password: string) => {
 const googleLoginSuccess = async (session: Record<string, any>) => {
 
     const isPatientExists = await prisma.patient.findUnique({
-        where: session.user.id
+        where: {
+        email:session.user.email
+        }
     })
 
     if (!isPatientExists) {

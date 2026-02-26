@@ -30,8 +30,8 @@
 
         const data = await response.json();
 
-        if (data.success) {
-          window.location.href = data.callbackURL;
+        if (data.url) {
+          window.location.href = data.url;
         } else {
           document.body.innerHTML = `
           <div>

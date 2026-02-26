@@ -178,11 +178,14 @@ const forgetPassword = catchAsync(async (req: Request, res: Response) => {
 
 const googleAuth = catchAsync(async (req: Request, res: Response) => {
 
+    console.log("hti the first req");
     const redirectPath = req.params.redirect || "/dashboard"
 
     const encodeRedirectPath = encodeURIComponent(redirectPath as string)
 
-    const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/google/success?redirect=${encodeRedirectPath}`
+    const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodeRedirectPath}`
+
+    console.log('hit the encoded path', callbackURL, envVars.BETTER_AUTH_URL);
 
 
     res.render('googleRedirect', {
@@ -196,21 +199,25 @@ const googleAuth = catchAsync(async (req: Request, res: Response) => {
 
 const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
 
+
     const redirectPath = req.query.redirect as string || '/dashboard'
 
-    const sessionToken = req.cookies['better-auth.Session_token'];
+    const sessionToken = req.cookies['better-auth.session_token'];
+
+    console.log("here is the session token", sessionToken);
     if (!sessionToken) {
         res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`)
+        return
     }
 
     const session = await auth.api.getSession({
         headers: {
-            "Cookie": `better-auth_session_token=${sessionToken}`
+            "Cookie": `better-auth.session_token=${sessionToken}`
         }
     })
 
 
-
+    console.log("here is the session ", session);
     if (!session || !session.user) {
         res.redirect(`${envVars.FRONTEND_URL}/login?error=no_user_found`)
         return
@@ -223,13 +230,16 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     tokenUtils.setAccessTokenCookie(res as Response, accessToken as string)
     tokenUtils.setRefreshTokenCookie(res as Response, refreshToken as string)
 
-    const isValidRedirectPath = redirectPath.startsWith('/') && !redirectPath.startsWith('//')
 
-    const finalRedirectPath = isValidRedirectPath || "/dashboard"
+    const isValidRedirectPath = redirectPath.startsWith("/") && !redirectPath.startsWith("//");
 
-    res.redirect(`${envVars.FRONTEND_URL}${finalRedirectPath}`)
+    const finalRedirectPath = isValidRedirectPath
+        ? redirectPath
+        : "/dashboard";
 
+    const finalUrl = `${envVars.FRONTEND_URL}${finalRedirectPath}`;
 
+    return res.redirect(finalUrl);
 })
 
 
