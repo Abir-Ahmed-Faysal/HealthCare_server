@@ -13,13 +13,19 @@ const getAllSpecialty = catchAsync(async (req, res) => {
 });
 
 const createSpecialty = catchAsync(async (req, res) => {
-    const payload = req.body;
+    const payload = { ...req.body, icon: req.file?.path };
+    console.log(req.body, "form the controller");
+
+    console.log(req.body, "from controller");
     const result = await specialtyService.createSpecialty(payload);
 
     if (!result) {
         return sendRes(res, { statusCode: StatusCodes.NOT_FOUND, message: "Failed to create a new specialty", success: false });
     }
-    return sendRes(res, { statusCode: StatusCodes.CREATED, message: "Specialty created successfully", success: true, data: result });
+    return sendRes(res, {
+        statusCode: StatusCodes.CREATED, message: "Specialty created successfully", success: true,
+         data:result
+    });
 });
 
 const updateSpecialty = catchAsync(async (req, res) => {

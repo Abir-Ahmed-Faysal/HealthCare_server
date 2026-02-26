@@ -16,7 +16,7 @@ import { IChangePasswordPayload, ILoginPayload, IRegisterPatientPayload } from "
 
 
 
-
+// !!!check if the user is social login you must check the password reset , change password and other route check if the user is social login!!!
 
 const registerPatient = async (payload: IRegisterPatientPayload) => {
     const { name, email, password } = payload

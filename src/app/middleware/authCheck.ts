@@ -12,7 +12,7 @@ export const authCheck = (...authRoles: Role[]) => {
     return (async (req: Request, res: Response, next: NextFunction) => {
   
         try {
-            const sessionToken = cookieUtils.getCookie(req, "better-auth.Session_token")
+            const sessionToken = cookieUtils.getCookie(req, "better-auth.session_token")
 
          
 

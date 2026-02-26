@@ -23,7 +23,7 @@ interface EnvConfig {
     SUPER_ADMIN_TOKEN_EXPIRES_IN: string;
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;
-    GOOGLE_CALLBACK_URL:string;
+    GOOGLE_CALLBACK_URL: string;
     EMAIL_SENDER: {
         EMAIL_SENDER_SMTP_USER: string;
         EMAIL_SENDER_SMTP_PASS: string;
@@ -31,12 +31,14 @@ interface EnvConfig {
         EMAIL_SENDER_SMTP_PORT: string;
         EMAIL_SENDER_SMTP_FROM: string;
 
+    },
+    CLOUDINARY: {
+        CLOUDINARY_CLOUD_NAME: string;
+        CLOUDINARY_API_KEY: string;
+        CLOUDINARY_API_SECRET: string;
     }
 
 }
-
-
-
 
 
 const loadEnvVariable = (): EnvConfig => {
@@ -63,6 +65,9 @@ const loadEnvVariable = (): EnvConfig => {
         'GOOGLE_CLIENT_ID',
         'GOOGLE_CLIENT_SECRET',
         'GOOGLE_CALLBACK_URL',
+        'CLOUDINARY_CLOUD_NAME',
+        'CLOUDINARY_API_KEY',
+        'CLOUDINARY_API_SECRET',
     ]
 
     requiredEnvVariables.forEach((envVar) => {
@@ -87,7 +92,7 @@ const loadEnvVariable = (): EnvConfig => {
         BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: process.env.BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE as string,
         SUPER_ADMIN_SECRET: process.env.SUPER_ADMIN_SECRET as string,
         SUPER_ADMIN_TOKEN_EXPIRES_IN: process.env.SUPER_ADMIN_TOKEN_EXPIRES_IN as string,
-        GOOGLE_CALLBACK_URL:process.env.GOOGLE_CALLBACK_URL as string,
+        GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
         EMAIL_SENDER: {
             EMAIL_SENDER_SMTP_USER: process.env.EMAIL_SENDER_SMTP_USER as string,
             EMAIL_SENDER_SMTP_PASS: process.env.EMAIL_SENDER_SMTP_PASS as string,
@@ -97,6 +102,11 @@ const loadEnvVariable = (): EnvConfig => {
         },
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
+        CLOUDINARY: {
+            CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+            CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+            CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string
+        }
     }
 }
 

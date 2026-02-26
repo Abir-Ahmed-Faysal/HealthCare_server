@@ -36,7 +36,7 @@ const getNewToken = catchAsync(async (req: Request, res: Response) => {
 
     if (!refreshToken) { throw new AppError(StatusCodes.UNAUTHORIZED, "refresh token is missing") }
 
-    const betterAuthSessionToken = req.cookies["better-auth.Session_token"]
+    const betterAuthSessionToken = req.cookies["better-auth.session_token"]
 
     if (!betterAuthSessionToken) {
         throw new AppError(StatusCodes.UNAUTHORIZED, "session token is missing")
@@ -62,7 +62,7 @@ const getNewToken = catchAsync(async (req: Request, res: Response) => {
 
 const changePassword = catchAsync(async (req: Request, res: Response) => {
 
-    const sessionToken = req.cookies["better-auth.Session_token"]
+    const sessionToken = req.cookies["better-auth.session_token"]
     if (!sessionToken) {
         throw new AppError(StatusCodes.UNAUTHORIZED, "session token is missing")
     }
@@ -97,11 +97,11 @@ const verifyEmail = catchAsync(async (req: Request, res: Response) => {
 
 const logout = catchAsync(async (req: Request, res: Response) => {
 
-    const sessionToken = req.cookies["better-auth.Session_token"]
+    const sessionToken = req.cookies["better-auth.session_token"]
 
     const result = await authService.logout(sessionToken)
 
-    cookieUtils.deleteCookie(res, "better-auth.Session_token", { httpOnly: true, sameSite: "none", secure: true })
+    cookieUtils.deleteCookie(res, "better-auth.session_token", { httpOnly: true, sameSite: "none", secure: true })
     cookieUtils.deleteCookie(res, "accessToken", { httpOnly: true, sameSite: "none", secure: true })
     cookieUtils.deleteCookie(res, "refreshToken", { httpOnly: true, sameSite: "none", secure: true })
 
