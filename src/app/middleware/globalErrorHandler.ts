@@ -2,19 +2,31 @@
 import { NextFunction, Request, Response } from "express";
 import { envVars } from "../config/env";
 import { StatusCodes } from "http-status-codes";
-import z, { success, unknown } from "zod";
+import z from "zod";
 import { TErrorResponse, TErrorSources } from "../interfaces/error.interfaces";
 import { zodErrorData } from "../errorHelpers/error.helper";
 import AppError from "../errorHelpers/AppError";
+import { deleteFileFromCloudinary } from "../config/cloudinary.config";
 
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const globalErrorHandler = (err: any, req: Request, res: Response, _: NextFunction) => {
+export const globalErrorHandler = async (err: any, req: Request, res: Response, _: NextFunction) => {
 
 
     if (envVars.NODE_ENV === "development") {
         console.log("Error form Global Error Handler", err);
+    }
+
+    if (req.file) {
+        await deleteFileFromCloudinary(req.file.path)
+    }
+
+
+    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+        const fileUrl = req.files.map((file) => file.path)
+
+        await Promise.all(fileUrl.map((url) => deleteFileFromCloudinary(url)))
     }
 
 
@@ -32,7 +44,7 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, _: Nex
         message = zodError.message
         errorSources = [...zodError.errorSources]
         stack = err.stack
-    }else if(err instanceof AppError){    
+    } else if (err instanceof AppError) {
         message = err.message
         statusCode = err.statusCode;
         errorSources = [{

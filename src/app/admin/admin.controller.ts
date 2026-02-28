@@ -30,6 +30,9 @@ const getAdmin = catchAsync(async (req: Request, res: Response) => {
 
 
 
+
+
+
 const updateAdmin = catchAsync(async (req: Request, res: Response) => {
     const result = await adminService.updateAdmin(req.params.id as string, req.body);
 
@@ -53,6 +56,36 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
         data: result
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

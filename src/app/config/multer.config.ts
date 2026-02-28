@@ -1,6 +1,7 @@
+/* eslint-disable no-useless-escape */
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
-import {  cloudinaryUpload } from "./cloudinary.config";
+import { cloudinaryUpload } from "./cloudinary.config";
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinaryUpload,
@@ -15,7 +16,7 @@ const storage = new CloudinaryStorage({
       .join(".")
       .toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9]/gi, "");
+      .replace(/[^a-z0-9\-]/g, "");
 
     const uniqueName =
       Math.random().toString(36).substring(2, 9) +
@@ -24,10 +25,10 @@ const storage = new CloudinaryStorage({
       "-" +
       filenameWithoutExtension;
 
-    const folder = extension === "pdf" ? "pdfs" : "others";
+    const folder = extension === "pdf" ? "pdfs" : "images";
 
     return {
-      folder: `HealthCare/${folder}`,
+      folder: `healthcare/${folder}`,
       public_id: uniqueName,
       resource_type: "auto",
     };
