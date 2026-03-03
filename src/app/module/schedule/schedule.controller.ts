@@ -20,7 +20,7 @@ const getAllSchedule = catchAsync(async (req: Request, res: Response) => {
 
     const query = req.query
     const result = await scheduleService.getAllSchedule(query as IQueryParams)
-    return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result, meta: result.meta })
+    return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result.data, meta: result.meta })
 })
 
 

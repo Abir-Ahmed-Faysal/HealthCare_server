@@ -2,15 +2,15 @@ import { Request, Response } from "express";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendRes } from "../../shared/sendRes";
 import { doctorScheduleService } from "./doctorSchedule.service";
+import { IUserRequest } from "../../interfaces/IUserRequest";
+import { IQueryParams } from "../../interfaces/query.interface";
 
 // 🔹 Create My
 const createMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id  ;
+  const user = req.user!;
+  const payload = req.body;
 
-  const result = await doctorScheduleService.createMyDoctorSchedule(
-    doctorId,
-    req.body
-  );
+  const result = await doctorScheduleService.createMyDoctorSchedule(user, payload);
 
   sendRes(res, {
     statusCode: 201,
@@ -22,38 +22,47 @@ const createMyDoctorSchedule = catchAsync(async (req: Request, res: Response) =>
 
 // 🔹 Get My
 const getMyDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
+  const user = req.user
+  const query = req.query
+
 
   const result =
-    await doctorScheduleService.getMyDoctorSchedules(doctorId);
+    await doctorScheduleService.getMyDoctorSchedules(user as IUserRequest, query as IQueryParams);
 
   sendRes(res, {
     statusCode: 200,
     success: true,
     message: "My schedules fetched successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta
   });
 });
 
 // 🔹 Admin Get All
 const getAllDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
+
+  const query = req.query
+
+
   const result =
-    await doctorScheduleService.getAllDoctorSchedules();
+    await doctorScheduleService.getAllDoctorSchedules(query as IQueryParams);
 
   sendRes(res, {
     statusCode: 200,
     success: true,
-    message: "All schedules fetched successfully",
-    data: result,
+    message: "All doctor's schedules fetched successfully",
+    data: result.data,
+    meta: result.meta
   });
 });
 
 // 🔹 Get By Id
 const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => {
   const { scheduleId } = req.params;
+  const { doctorId } = req.params;
 
   const result =
-    await doctorScheduleService.getDoctorScheduleById(scheduleId);
+    await doctorScheduleService.getDoctorScheduleById(doctorId as string, scheduleId as string);
 
   sendRes(res, {
     statusCode: 200,
@@ -65,14 +74,16 @@ const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => 
 
 // 🔹 Update My
 const updateMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
-  const { id } = req.params;
+
+
+  const user = req.user!;
+  const payload = req.body;
 
   const result =
     await doctorScheduleService.updateMyDoctorSchedule(
-      doctorId,
-      id,
-      req.body
+
+      user as IUserRequest,
+      payload
     );
 
   sendRes(res, {
@@ -85,11 +96,11 @@ const updateMyDoctorSchedule = catchAsync(async (req: Request, res: Response) =>
 
 // 🔹 Delete My
 const deleteMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
-  const { id } = req.params;
+  const user = req.user
+  const { id: scheduleId } = req.params;
 
   const result =
-    await doctorScheduleService.deleteMyDoctorSchedule(doctorId, id);
+    await doctorScheduleService.deleteMyDoctorSchedule(scheduleId as string, user as IUserRequest);
 
   sendRes(res, {
     statusCode: 200,
