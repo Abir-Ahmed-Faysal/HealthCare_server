@@ -5,10 +5,13 @@ import { userRoutes } from '../module/user/user.route';
 import { doctorRoutes } from '../module/doctor/doctor.routes';
 import { superAdminRoutes } from '../superAdmin/superAdmin.routes';
 import { adminRoutes } from '../admin/admin.routes';
+import { scheduleRoutes } from '../module/schedule/schedule.routes';
+import { DoctorScheduleRoutes } from '../module/doctorSchedule/doctorSchedule.routes';
+import { appointmentRoutes } from '../module/appointment/appointment.routes';
+
 
 
 const router = express.Router()
-
 
 
 router.use("/auth", authRouter)
@@ -17,7 +20,9 @@ router.use("/specialty", SpecialtyRouter)
 router.use("/doctors", doctorRoutes)
 router.use("/admins", adminRoutes)
 router.use("/super-admins", superAdminRoutes)
-
+router.use('/schedules', scheduleRoutes)
+router.use('/doctor-schedules', DoctorScheduleRoutes)
+router.use('/appointments', appointmentRoutes)
 
 
 export const indexRoutes = router

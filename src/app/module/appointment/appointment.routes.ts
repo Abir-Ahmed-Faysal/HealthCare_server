@@ -38,4 +38,4 @@ router.patch(
 );
 
 
-export const AppointmentRouter= router
+export const appointmentRoutes= router

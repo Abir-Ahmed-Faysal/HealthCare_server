@@ -20,7 +20,7 @@ const getAllSchedule = catchAsync(async (req: Request, res: Response) => {
 
     const query = req.query
     const result = await scheduleService.getAllSchedule(query as IQueryParams)
-    return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result })
+    return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result, meta: result.meta })
 })
 
 
@@ -35,13 +35,16 @@ const getScheduleById = catchAsync(async (req: Request, res: Response) => {
 
 
 const updateSchedule = catchAsync(async (req: Request, res: Response) => {
-    const result = await scheduleService.updateSchedule()
+    const id = req.params.id
+    const payload = req.body
+    const result = await scheduleService.updateSchedule(id as string, payload)
     return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result })
 })
 
 
 const deleteSchedule = catchAsync(async (req: Request, res: Response) => {
-    const result = await scheduleService.deleteSchedule()
+    const id = req.params.id
+    const result = await scheduleService.deleteSchedule(id as string)
     return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result })
 })
 
