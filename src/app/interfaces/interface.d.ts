@@ -1,4 +1,4 @@
-import { IUserRequest } from "../interfaces/IUserRequest"
+import { IUserRequest } from "./IUserRequest"
 
 declare global {
   namespace Express {
