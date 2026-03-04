@@ -2,6 +2,8 @@ import express from 'express';
 import { authCheck } from '../../middleware/authCheck';
 import { Role } from '../../../generated/prisma/enums';
 import { AppointmentController } from './appointment.controller';
+import { validateRequest } from '../../middleware/validataionRequest';
+import { createAppointmentPayload, updateAppointmentPayload } from './appointment.validation';
 
 
 
@@ -14,7 +16,7 @@ router.get(
 );
 
 router.get(
-  "/my-my-appointments",
+  "/my-appointments",
   authCheck(Role.DOCTOR, Role.PATIENT),
   AppointmentController.getMyAppointments
 );
@@ -27,13 +29,13 @@ router.get(
 
 router.post(
   "/book-appointment",
-  authCheck(Role.PATIENT),
+  authCheck(Role.PATIENT),validateRequest(createAppointmentPayload),
   AppointmentController.bookAppointment
 );
 
 router.patch(
   "/change-appointment/:id",
-  authCheck(Role.DOCTOR, Role.PATIENT, Role.ADMIN, Role.SUPER_ADMIN),
+  authCheck(Role.DOCTOR, Role.PATIENT, Role.ADMIN, Role.SUPER_ADMIN),validateRequest(updateAppointmentPayload),
   AppointmentController.changeAppointmentStatus
 );
 

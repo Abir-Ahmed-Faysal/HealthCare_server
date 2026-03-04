@@ -2,6 +2,8 @@ import express from 'express';
 import { authCheck } from '../../middleware/authCheck';
 import { Role } from '../../../generated/prisma/enums';
 import { doctorScheduleController } from './doctorSchedule.controller';
+import { validateRequest } from '../../middleware/validataionRequest';
+import { createDoctorScheduleValidationSchema, updateDoctorScheduleSchema } from './doctorSchedule.validation';
 
 
 
@@ -28,13 +30,13 @@ router.get(
 
 router.post(
   "/create-my-doctor-schedule",
-  authCheck(Role.DOCTOR),
+  authCheck(Role.DOCTOR),validateRequest(createDoctorScheduleValidationSchema),
   doctorScheduleController.createMyDoctorSchedule
 );
 
 router.patch(
   "/update-my-doctor-schedule",
-  authCheck(Role.DOCTOR),
+  authCheck(Role.DOCTOR),validateRequest(updateDoctorScheduleSchema),
   doctorScheduleController.updateMyDoctorSchedule
 );
 

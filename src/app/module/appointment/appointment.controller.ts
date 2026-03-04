@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendRes } from "../../shared/sendRes";
 import { AppointmentService } from "./appointment.service";
+import { IUserRequest } from "../../interfaces/IUserRequest";
 
 // 🔹 All
 const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
@@ -17,9 +18,9 @@ const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
 
 // 🔹 My
 const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user.id;
+  const user = req.user
 
-  const result = await AppointmentService.getMyAppointments(userId);
+  const result = await AppointmentService.getMyAppointments(user as IUserRequest);
 
   sendRes(res, {
     statusCode: 200,
@@ -46,12 +47,10 @@ const getMySingleAppointment = catchAsync(async (req: Request, res: Response) =>
 
 // 🔹 Book
 const bookAppointment = catchAsync(async (req: Request, res: Response) => {
-  const patientId = req.user.id;
+  const user = req.user
+  const payload = req.body
 
-  const result = await AppointmentService.bookAppointment(
-    patientId,
-    req.body
-  );
+  const result = await AppointmentService.bookAppointment(payload, user as IUserRequest)
 
   sendRes(res, {
     statusCode: 201,
