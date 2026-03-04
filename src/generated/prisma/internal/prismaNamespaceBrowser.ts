@@ -110,6 +110,7 @@ export const AppointmentScalarFieldEnum = {
   patientId: 'patientId',
   status: 'status',
   videoCallingId: 'videoCallingId',
+  appointmentStatus: 'appointmentStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

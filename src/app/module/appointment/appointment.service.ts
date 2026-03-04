@@ -138,56 +138,81 @@ export const bookAppointment = async (
 }
 
 // 🔹 Change Appointment Status
-const changeAppointmentStatus = async (appointmentId: string, appointmentStatus: AppointmentStatus, user: IUserRequest) => {
+const changeAppointmentStatus = async (
+  appointmentId: string,
+  requestedStatus: AppointmentStatus,
+  user: IUserRequest
+) => {
 
-  const appointmentData = await prisma.appointment.findUniqueOrThrow({
-    where: { id: appointmentId }, include: {
-      doctor: true
-    }
+  if (!Object.values(AppointmentStatus).includes(requestedStatus)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid requested status");
+  }
+
+  const appointment = await prisma.appointment.findUniqueOrThrow({
+    where: { id: appointmentId },
+    include: { doctor: true, patient: true }
   })
+
+
+  if (
+    user.role === Role.DOCTOR &&
+    appointment.doctor.email !== user.email
+  ) {
+    throw new AppError(StatusCodes.FORBIDDEN, "Not authorized")
+  }
+
+  if (
+    user.role === Role.PATIENT &&
+    appointment.patient.email !== user.email
+  ) {
+    throw new AppError(StatusCodes.FORBIDDEN, "Not authorized")
+  }
+
+  const currentStatus = appointment.appointmentStatus
+  let nextStatus: AppointmentStatus | null = null
 
 
   if (user.role === Role.DOCTOR) {
 
-
-    if (appointmentData.doctor.email !== user?.email) {
-      throw new AppError(StatusCodes.FORBIDDEN, "You are not authorized to change this appointment status")
+    if (currentStatus === AppointmentStatus.SCHEDULED &&
+      requestedStatus === AppointmentStatus.ONPROGRESS) {
+      nextStatus = AppointmentStatus.ONPROGRESS
     }
 
-if(appointmentData.status === AppointmentStatus.CANCELLED || appointmentData.status === AppointmentStatus.CONFIRMED){
-  throw new AppError(StatusCodes.FORBIDDEN, "You can't change status of this appointment")
-}
-
-
-
-    await prisma.appointment.update({
-      where: {
-        id: appointmentId
-      },
-      data: {
-        status: appointmentStatus
-      }
-    })
-
-
-
-
-
-
-
-
-
-  } else if (user.role === Role.PATIENT) {
-    if (appointmentData.patient.email !== user?.email) {
-      throw new AppError(StatusCodes.FORBIDDEN, "You are not authorized to change this appointment status")
+    else if (currentStatus === AppointmentStatus.ONPROGRESS &&
+      requestedStatus === AppointmentStatus.COMPLETE) {
+      nextStatus = AppointmentStatus.COMPLETE
     }
+
+    else {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Invalid status transition")
+    }
+
   }
 
+  else if (user.role === Role.PATIENT) {
 
+    if (currentStatus === AppointmentStatus.SCHEDULED) {
+      nextStatus = AppointmentStatus.CANCELLED
+    } else {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Cannot cancel now")
+    }
 
+  } else if (user.role === Role.ADMIN || user.role === Role.SUPER_ADMIN) {
+    nextStatus = requestedStatus
+  }
 
+  if (!nextStatus) {
+    throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to determine next status");
+  }
 
-};
+  await prisma.appointment.update({
+    where: { id: appointmentId },
+    data: { appointmentStatus: nextStatus }
+  })
+
+  return { message: "Appointment status updated successfully" }
+}
 
 export const AppointmentService = {
   getAllAppointments,

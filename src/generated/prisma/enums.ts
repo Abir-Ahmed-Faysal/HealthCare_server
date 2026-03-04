@@ -48,7 +48,7 @@ export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 export const AppointmentStatus = {
   SCHEDULED: 'SCHEDULED',
   ONPROGRESS: 'ONPROGRESS',
-  CONFIRMED: 'CONFIRMED',
+  COMPLETE: 'COMPLETE',
   CANCELLED: 'CANCELLED'
 } as const
 
