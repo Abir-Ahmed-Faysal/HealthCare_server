@@ -11,6 +11,7 @@
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
     "push": "prisma db push",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
     "pull": "prisma db pull",
     "dev": "tsx watch src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -39,7 +40,9 @@
     "npm": "^11.10.1",
     "pg": "^8.18.0",
     "qs": "^6.15.0",
+    "stripe": "^20.4.0",
     "tsx": "^4.21.0",
+    "uuidv7": "^1.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

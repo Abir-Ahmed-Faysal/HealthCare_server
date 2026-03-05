@@ -32,6 +32,16 @@ router.post(
   authCheck(Role.PATIENT),validateRequest(createAppointmentPayload),
   AppointmentController.bookAppointment
 );
+router.post(
+  "/book-appointment-with-pay-later",
+  authCheck(Role.PATIENT),validateRequest(createAppointmentPayload),
+  AppointmentController.bookAppointment
+);
+router.post(
+  "/initiate-payment/:id",
+  authCheck(Role.PATIENT),
+  AppointmentController.bookAppointment
+);
 
 router.patch(
   "/change-appointment/:id",

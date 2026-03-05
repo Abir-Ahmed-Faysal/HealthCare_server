@@ -1,109 +1,53 @@
-import { Request, Response } from "express";
-import { catchAsync } from "../../shared/catchAsync";
-import { sendRes } from "../../shared/sendRes";
-import { doctorScheduleService } from "./payment.service";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Request, Response } from "express"
+import { catchAsync } from "../../shared/catchAsync"
+import { envVars } from "../../config/env"
+import { StatusCodes } from "http-status-codes"
+import { stripe } from "../../config/stripe.config"
+import { paymentService } from "./payment.service"
+import { sendRes } from "../../shared/sendRes"
+import { statusCodes } from "better-auth"
 
-// 🔹 Create My
-const createMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id  ;
+const handlerStripeWebhookEvent = catchAsync(async (req: Request, res: Response) => {
 
-  const result = await doctorScheduleService.createMyDoctorSchedule(
-    doctorId,
-    req.body
-  );
 
-  sendRes(res, {
-    statusCode: 201,
-    success: true,
-    message: "Schedule created successfully",
-    data: result,
-  });
-});
+  const signature = req.headers['stripe-signature'] as string
+  const webhookSecret = envVars.STRIPE.STRIPE_WEBHOOK_SECRET as string
 
-// 🔹 Get My
-const getMyDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
+  if (!signature || !webhookSecret) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing stripe signature or webhook secret" })
+  }
 
-  const result =
-    await doctorScheduleService.getMyDoctorSchedules(doctorId);
+  let event
 
-  sendRes(res, {
-    statusCode: 200,
-    success: true,
-    message: "My schedules fetched successfully",
-    data: result,
-  });
-});
 
-// 🔹 Admin Get All
-const getAllDoctorSchedules = catchAsync(async (req: Request, res: Response) => {
-  const result =
-    await doctorScheduleService.getAllDoctorSchedules();
+  try {
+    event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret)
 
-  sendRes(res, {
-    statusCode: 200,
-    success: true,
-    message: "All schedules fetched successfully",
-    data: result,
-  });
-});
 
-// 🔹 Get By Id
-const getDoctorScheduleById = catchAsync(async (req: Request, res: Response) => {
-  const { scheduleId } = req.params;
 
-  const result =
-    await doctorScheduleService.getDoctorScheduleById(scheduleId);
 
-  sendRes(res, {
-    statusCode: 200,
-    success: true,
-    message: "Schedule fetched successfully",
-    data: result,
-  });
-});
+  } catch (error: any) {
+    console.log(`Error processing webhook event: ${error}`);
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Error processing stripe webhook event" })
+  }
 
-// 🔹 Update My
-const updateMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
-  const { id } = req.params;
 
-  const result =
-    await doctorScheduleService.updateMyDoctorSchedule(
-      doctorId,
-      id,
-      req.body
-    );
+  try {
+    const result = await paymentService.handlerStripeWebhookEvent(event)
 
-  sendRes(res, {
-    statusCode: 200,
-    success: true,
-    message: "Schedule updated successfully",
-    data: result,
-  });
-});
+    sendRes(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "stripe webhook event processed successfully",
+      data: result
+    })
+  } catch (error) {
+    console.log("Error handling stripe webhook event", error)
+    return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error handling stripe webhook event" })
+  }
+})
 
-// 🔹 Delete My
-const deleteMyDoctorSchedule = catchAsync(async (req: Request, res: Response) => {
-  const doctorId = req.user.id;
-  const { id } = req.params;
 
-  const result =
-    await doctorScheduleService.deleteMyDoctorSchedule(doctorId, id);
 
-  sendRes(res, {
-    statusCode: 200,
-    success: true,
-    message: "Schedule deleted successfully",
-    data: result,
-  });
-});
-
-export const doctorScheduleController = {
-  createMyDoctorSchedule,
-  getMyDoctorSchedules,
-  getAllDoctorSchedules,
-  getDoctorScheduleById,
-  updateMyDoctorSchedule,
-  deleteMyDoctorSchedule,
-};
+export const paymentController = { handlerStripeWebhookEvent }

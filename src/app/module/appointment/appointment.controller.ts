@@ -3,10 +3,14 @@ import { catchAsync } from "../../shared/catchAsync";
 import { sendRes } from "../../shared/sendRes";
 import { AppointmentService } from "./appointment.service";
 import { IUserRequest } from "../../interfaces/IUserRequest";
+import { IQueryParams } from "../../interfaces/query.interface";
+import { StatusCodes } from "http-status-codes";
 
-// 🔹 All
+//  All
 const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
-  const result = await AppointmentService.getAllAppointments();
+
+  const query = req.query
+  const result = await AppointmentService.getAllAppointments(query as IQueryParams);
 
   sendRes(res, {
     statusCode: 200,
@@ -16,7 +20,8 @@ const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// 🔹 My
+
+//  My
 const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
   const user = req.user
 
@@ -30,12 +35,13 @@ const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// 🔹 My Single
-const getMySingleAppointment = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user.id;
-  const { id } = req.params;
 
-  const result = await AppointmentService.getMySingleAppointment(userId, id);
+//  My Single
+const getMySingleAppointment = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user
+  const { id: appointmentId } = req.params;
+
+  const result = await AppointmentService.getMySingleAppointment(appointmentId as string, user as IUserRequest);
 
   sendRes(res, {
     statusCode: 200,
@@ -45,7 +51,7 @@ const getMySingleAppointment = catchAsync(async (req: Request, res: Response) =>
   });
 });
 
-// 🔹 Book
+
 const bookAppointment = catchAsync(async (req: Request, res: Response) => {
   const user = req.user
   const payload = req.body
@@ -60,13 +66,18 @@ const bookAppointment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// 🔹 Change
+
 const changeAppointmentStatus = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+
+  const { id: appointmentId } = req.params;
+  const user = req.user
+  const requestedStatus = req.body
+
 
   const result = await AppointmentService.changeAppointmentStatus(
-    id,
-    req.body
+    appointmentId as string,
+    requestedStatus,
+    user as IUserRequest,
   );
 
   sendRes(res, {
@@ -77,10 +88,43 @@ const changeAppointmentStatus = catchAsync(async (req: Request, res: Response) =
   });
 });
 
+const bookAppointmentWithPayLater = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body
+  const user = req.user
+  const result = await AppointmentService.bookAppointmentWithPayLater(payload, user as IUserRequest)
+
+  return sendRes(res, {
+    statusCode: StatusCodes.CREATED,
+    success: true,
+    message: "Appointment Booked Successfully",
+    data: result
+  })
+
+})
+
+const initiatePayment = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user
+  const { id: appointmentId } = req.params
+
+  const result = await AppointmentService.initiatePayment(appointmentId as string, user as IUserRequest)
+
+
+  return sendRes(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Payment Initiated Successfully",
+    data: result
+  })
+})
+
+
+
 export const AppointmentController = {
   getAllAppointments,
   getMyAppointments,
   getMySingleAppointment,
   bookAppointment,
   changeAppointmentStatus,
+  initiatePayment,
+  bookAppointmentWithPayLater
 };
