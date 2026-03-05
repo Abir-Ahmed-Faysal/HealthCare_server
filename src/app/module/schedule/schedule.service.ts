@@ -112,6 +112,7 @@ const getScheduleById = async (id: string) => {
     return result
 }
 
+// refactoring needed cause to check there any schedule for this time exist ..if exist the doctor appointment will be destroyed
 const updateSchedule = async (
     id: string,
     payload: IUpdateSchedulePayload

@@ -10,11 +10,13 @@ import { prisma } from "../lib/prisma";
 
 export const authCheck = (...authRoles: Role[]) => {
     return (async (req: Request, res: Response, next: NextFunction) => {
-  
+
+       
+
         try {
             const sessionToken = cookieUtils.getCookie(req, "better-auth.session_token")
 
-         
+
 
             if (!sessionToken) return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: "You are not authorized to access this route" });
 

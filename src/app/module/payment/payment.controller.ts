@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes"
 import { stripe } from "../../config/stripe.config"
 import { paymentService } from "./payment.service"
 import { sendRes } from "../../shared/sendRes"
-import { statusCodes } from "better-auth"
+
 
 const handlerStripeWebhookEvent = catchAsync(async (req: Request, res: Response) => {
 
@@ -44,7 +44,7 @@ const handlerStripeWebhookEvent = catchAsync(async (req: Request, res: Response)
     })
   } catch (error) {
     console.log("Error handling stripe webhook event", error)
-    return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error handling stripe webhook event" })
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error handling stripe webhook event" })
   }
 })
 

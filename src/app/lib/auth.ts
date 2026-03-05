@@ -96,6 +96,16 @@ export const auth = betterAuth({
                     where: { email }
                 })
 
+                if (!user) {
+                    console.log(`user with email ${email}  not found. Can not send verification OTP`);
+                    return
+                }
+
+                if (user && user.role === Role.SUPER_ADMIN) {
+                    console.log(` user with email ${email} is as super admin. not need to verified`);
+                    return
+                }
+
                 if (user && !user.emailVerified) {
                     sendEmail({
                         to: email,
@@ -134,7 +144,7 @@ export const auth = betterAuth({
     })],
 
 
-    trustedOrigins: [envVars.FRONTEND_URL , "http://localhost:5000",envVars.BETTER_AUTH_URL, "http://localhost:3000"],
+    trustedOrigins: [envVars.FRONTEND_URL, "http://localhost:5000", envVars.BETTER_AUTH_URL, "http://localhost:3000"],
 
     advanced: {
         useSecureCookies: false,

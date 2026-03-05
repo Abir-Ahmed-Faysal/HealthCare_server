@@ -54,7 +54,7 @@ const setRefreshTokenCookie = (res: Response, token: string) => {
 const SetBetterAuthSessionCookie = (res: Response, token: string) => {
     const maxAge = ms(envVars.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as StringValue)
 
-    cookieUtils.setCookie(res, "better-auth.Session_token", token, {
+    cookieUtils.setCookie(res, "better-auth.session_token", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",

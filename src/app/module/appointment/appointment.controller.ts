@@ -119,6 +119,8 @@ const initiatePayment = catchAsync(async (req: Request, res: Response) => {
 
 
 
+
+
 export const AppointmentController = {
   getAllAppointments,
   getMyAppointments,

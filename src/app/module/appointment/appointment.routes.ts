@@ -40,7 +40,7 @@ router.post(
 router.post(
   "/initiate-payment/:id",
   authCheck(Role.PATIENT),
-  AppointmentController.bookAppointment
+  AppointmentController.initiatePayment
 );
 
 router.patch(

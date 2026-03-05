@@ -33,7 +33,7 @@ const getScheduleById = catchAsync(async (req: Request, res: Response) => {
 })
 
 
-
+// !error if delete the schedule the doctor booked
 const updateSchedule = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id
     const payload = req.body
@@ -45,7 +45,7 @@ const updateSchedule = catchAsync(async (req: Request, res: Response) => {
 const deleteSchedule = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id
     const result = await scheduleService.deleteSchedule(id as string)
-    return sendRes(res, { statusCode: 201, message: "successfully", success: true, data: result })
+    return sendRes(res, { statusCode: 201, message: "delete successfully", success: true, data: result })
 })
 
 

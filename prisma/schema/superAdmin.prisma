@@ -3,7 +3,7 @@ model Super_Admin {
     name          String  @db.VarChar(30)
     email         String  @unique
     profilePhoto  String?
-    contactNumber String
+    contactNumber String?
 
     isDeleted Boolean   @default(false)
     deletedAt DateTime?

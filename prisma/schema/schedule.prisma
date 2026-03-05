@@ -2,7 +2,7 @@ model Schedule {
     id        String   @id @default(uuid(7))
     startDateTime DateTime
     endDateTime   DateTime
-    createAt  DateTime @default(now())
+    createdAt  DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     doctorSchedules DoctorSchedule[]
