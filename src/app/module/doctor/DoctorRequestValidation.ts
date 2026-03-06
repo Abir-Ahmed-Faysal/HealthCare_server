@@ -1,4 +1,20 @@
 import z from "zod";
+import { Gender } from "../../../generated/prisma/enums";
+
+/*
+name          String
+profilePhoto  String
+address       String
+contactNumber String
+averageRating String
+registrationNumber  String
+experience          Int
+gender              Gender
+appointmentFee      Float
+qualification       String
+currentWorkingPlace String
+designation         String
+*/ 
 
 const updateDoctorValidationSchema = z.object({
   
@@ -24,6 +40,24 @@ const updateDoctorValidationSchema = z.object({
  
 });
 
+
+const updateDoctorProfileValidationSchema = z.object({
+
+  name: z.string().optional(),
+  profilePhoto: z.url("Invalid URL format").optional(),
+  address: z.string().optional(),
+  contactNumber: z.string().optional(),
+  averageRating: z.string().optional(),
+  registrationNumber: z.string().optional(),
+  experience: z.number().optional(),
+  gender: z.enum([Gender.MALE, Gender.FEMALE, Gender.OTHER]).optional(),
+  appointmentFee: z.number().optional(),
+  qualification: z.string().optional(),
+  currentWorkingPlace: z.string().optional(),
+  designation: z.string().optional(),
+
+});
+
 export const DoctorValidation = {
-  updateDoctorValidationSchema,
+  updateDoctorValidationSchema,updateDoctorProfileValidationSchema
 };

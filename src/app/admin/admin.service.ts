@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../lib/prisma";
 import AppError from "../errorHelpers/AppError";
 import { IAdminUpdatePayload } from "./admin.interface";
+import { IUserRequest } from "../interfaces/IUserRequest";
 
 
 
@@ -45,32 +47,42 @@ const getAdminById = async (id: string) => {
 };
 
 
+const updateAdminProfile = async (
+  user: IUserRequest,
+  payload: IAdminUpdatePayload
+) => {
 
-const updateAdmin = async (id: string, payload: IAdminUpdatePayload) => {
-  const existingAdmin = await prisma.admin.findFirst({
-    where: { id, isDeleted: false },
-  });
+  const adminData = await prisma.admin.findUniqueOrThrow({
+    where: { email: user.email }
+  })
 
-  if (!existingAdmin) {
-    throw new AppError(StatusCodes.NOT_FOUND, "admin not found");
-  }
+  await prisma.$transaction(async (tx) => {
 
-  const updatedAdmin = await prisma.admin.update({
-    where: { id },
-    data: payload,
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  });
+    await tx.admin.update({
+      where: { id: adminData.id },
+      data: payload
+    })
 
-  return updatedAdmin;
-};
+    const userPayload: any = { ...payload }
 
+    if (payload.profilePhoto) {
+      userPayload.image = payload.profilePhoto
+      delete userPayload.profilePhoto
+    }
+
+    await tx.user.update({
+      where: { email: user.email },
+      data: userPayload
+    })
+
+  })
+
+  const result = await prisma.admin.findUniqueOrThrow({
+    where: { email: adminData.email },
+  })
+
+  return result
+}
 
 
 const deleteAdmin = async (id: string) => {
@@ -96,7 +108,7 @@ const deleteAdmin = async (id: string) => {
       },
     });
 
-   await tx.admin.update({
+    await tx.admin.update({
       where: {
         id,
       },
@@ -106,13 +118,13 @@ const deleteAdmin = async (id: string) => {
       },
     });
 
-await tx.session.deleteMany({
-  where:{
-    userId:id
-  }
-})
+    await tx.session.deleteMany({
+      where: {
+        userId: id
+      }
+    })
   });
-  
+
   return { message: "admin data deleted successfully" };
 };
 
@@ -121,6 +133,6 @@ await tx.session.deleteMany({
 export const adminService = {
   getAllAdmins,
   getAdminById,
-  updateAdmin,
+  updateAdminProfile,
   deleteAdmin,
 };

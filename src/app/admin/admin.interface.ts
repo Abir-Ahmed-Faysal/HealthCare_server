@@ -3,7 +3,9 @@ interface IAdminFilterRequest {
 }
 
 interface IAdminUpdatePayload {
-  name?: string;
+  name: string
+  profilePhoto: string
+  contactNumber: string
 }
 
 export type { IAdminFilterRequest, IAdminUpdatePayload };

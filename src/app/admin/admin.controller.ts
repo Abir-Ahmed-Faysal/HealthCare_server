@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { sendRes } from "../shared/sendRes";
 import { adminService } from "./admin.service";
 import { catchAsync } from "../shared/catchAsync";
+import { IUserRequest } from "../interfaces/IUserRequest";
 
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
     const result = await adminService.getAllAdmins();
@@ -29,12 +30,11 @@ const getAdmin = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-
-
-
-
 const updateAdmin = catchAsync(async (req: Request, res: Response) => {
-    const result = await adminService.updateAdmin(req.params.id as string, req.body);
+    const user = req.user
+    const payload = req.body
+
+    const result = await adminService.updateAdminProfile(user as IUserRequest, payload);
 
     return sendRes(res, {
         statusCode: StatusCodes.OK,

@@ -3,11 +3,11 @@ model Patient_Health_Data {
 
     height           String
     weight           String
-    dateOfBirth      String
+    dateOfBirth      DateTime
     gender           Gender
     bloodGroup       BloodGroup
-    dasAllergies     Boolean
-    hsaDiabetes      Boolean
+    hasAllergies     Boolean
+    hasDiabetes      Boolean
     smokingStatus    Boolean
     recentAnxiety    String
     recentDepression String
@@ -18,8 +18,8 @@ model Patient_Health_Data {
     patient          Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     bloodPressure    String
     bloodSugar       String
-    createdAt        DateTime @default(now())
-    updatedAt        DateTime @updatedAt
+    createdAt        DateTime   @default(now())
+    updatedAt        DateTime   @updatedAt
 
     @@index([patientId])
     @@map("patient_health_data")

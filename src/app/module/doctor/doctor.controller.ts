@@ -4,6 +4,7 @@ import { sendRes } from "../../shared/sendRes"
 import { catchAsync } from "../../shared/catchAsync"
 import { Request, Response } from "express"
 import { IQueryParams } from "../../interfaces/query.interface"
+import { IUserRequest } from "../../interfaces/IUserRequest"
 
 const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
 
@@ -26,8 +27,8 @@ const getDoctor = catchAsync(async (req: Request, res: Response) => {
 
 
 const updateDoctor = catchAsync(async (req: Request, res: Response) => {
-
-    const result = await doctorService.updateDoctor(req.params.id as string, req.body)
+    const user = req.user
+    const result = await doctorService.updateDoctor(user as IUserRequest, req.body)
 
     return sendRes(res, { statusCode: StatusCodes.OK, success: true, message: "doctor data create successfully", data: result })
 })
@@ -35,25 +36,11 @@ const updateDoctor = catchAsync(async (req: Request, res: Response) => {
 
 
 const deleteDoctor = catchAsync(async (req: Request, res: Response) => {
-
-    const result = await doctorService.updateDoctor(req.params.id as string, req.body)
+    const user = req.user
+    const result = await doctorService.updateDoctor(user as IUserRequest, req.body)
 
     return sendRes(res, { statusCode: StatusCodes.OK, success: true, message: "doctor data delete successfully", data: result })
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 export const doctorController = {
