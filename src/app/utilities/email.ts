@@ -25,7 +25,7 @@ interface sendEmailOptions {
     attachments?: {
         filename: string,
         content: Buffer | string,
-        contendType: string
+        contentType: string 
     }[]
 }
 
@@ -47,7 +47,7 @@ export const sendEmail = async ({ to, subject, templateName, templateData, attac
             attachments: attachments?.map(attachment => ({
                 filename: attachment.filename,
                 content: attachment.content,
-                contentType: attachment.contendType
+                contentType: attachment.contentType
             }))
         })
 

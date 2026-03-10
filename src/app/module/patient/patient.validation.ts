@@ -8,7 +8,6 @@ interfaces...
 const updatePatientProfileZodSchema = z.object({
     patientInfo: z.object({
         name: z.string().min(3, "name must be at least 3 characters long"),
-        email: z.string("email is required"),
         profilePhoto: z.url("profile photo must be a valid url").optional(),
         address: z.string().optional(),
         contactNumber: z
@@ -18,25 +17,41 @@ const updatePatientProfileZodSchema = z.object({
             .optional(),
     }).optional(),
 
-    patientHealthData: z.object({
-        height: z.string().optional(),
-        weight: z.string().optional(),
-        dateOfBirth: z
-            .string()
-            .refine((date) => !isNaN(Date.parse(date)), "date of birth must be a valid date")
-            .optional(),
-        gender: z.enum(Gender).optional(),
-        bloodGroup: z.enum([
-            BloodGroup.A_POSITIVE,
-            BloodGroup.A_NEGATIVE,
-            BloodGroup.B_POSITIVE,
-            BloodGroup.B_NEGATIVE,
-            BloodGroup.O_POSITIVE,
-            BloodGroup.O_NEGATIVE,
-            BloodGroup.AB_POSITIVE,
-            BloodGroup.AB_NEGATIVE,
-        ]).optional(),
-    }).optional(),
+ patientHealthData: z.object({
+    height: z.string().optional(),
+    weight: z.string().optional(),
+
+    bloodPressure: z.string().optional(),
+    bloodSugar: z.string().optional(),
+
+    dateOfBirth: z
+        .string()
+        .refine((date) => !isNaN(Date.parse(date)), "date of birth must be a valid date")
+        .optional(),
+
+    gender: z.enum(Gender).optional(),
+
+    bloodGroup: z.enum([
+        BloodGroup.A_POSITIVE,
+        BloodGroup.A_NEGATIVE,
+        BloodGroup.B_POSITIVE,
+        BloodGroup.B_NEGATIVE,
+        BloodGroup.O_POSITIVE,
+        BloodGroup.O_NEGATIVE,
+        BloodGroup.AB_POSITIVE,
+        BloodGroup.AB_NEGATIVE,
+    ]).optional(),
+
+    hasAllergies: z.boolean().optional(),
+    hasDiabetes: z.boolean().optional(),
+    smokingStatus: z.boolean().optional(),
+    recentAnxiety: z.string().optional(),
+    recentDepression: z.string().optional(),
+    hasPastSurgery: z.boolean().optional(),
+    pregnancyStatus: z.boolean().optional(),
+    maritalStatus: z.boolean().optional(),
+
+}).optional(),
 
     medicalReports: z
         .array(
@@ -74,3 +89,23 @@ const updatePatientProfileZodSchema = z.object({
 export const patientValidation = {
     updatePatientProfileZodSchema,
 };
+
+
+// const da= {
+//   "patientInfo": {
+//     "name": "John Doe",
+//     "contactNumber": "01712345678",
+//         "address": "Dhaka, Bangladesh",
+//     "profilePhoto": "https://example.com/images/patients/john-doe.jpg"
+//   },
+//   "patientHealthData": {
+//     "height": "175",
+//     "weight": "72",
+//     "bloodPressure": "120/80",
+//     "allergies": "Peanuts",
+//     "dateOfBirth": "1995-06-15",
+//     "bloodGroup": "O_POSITIVE",
+//     "currentMedications": "None",
+//     "medicalHistory": "No chronic conditions"
+//   }
+// }

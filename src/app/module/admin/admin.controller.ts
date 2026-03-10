@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { sendRes } from "../shared/sendRes";
+import { sendRes } from "../../shared/sendRes";
 import { adminService } from "./admin.service";
-import { catchAsync } from "../shared/catchAsync";
-import { IUserRequest } from "../interfaces/IUserRequest";
+import { catchAsync } from "../../shared/catchAsync";
+import { IUserRequest } from "../../interfaces/IUserRequest";
 
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
     const result = await adminService.getAllAdmins();

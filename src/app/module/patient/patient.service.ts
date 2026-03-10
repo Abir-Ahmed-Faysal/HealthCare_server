@@ -1,3 +1,4 @@
+import { deleteFileFromCloudinary } from "../../config/cloudinary.config";
 import { IUserRequest } from "../../interfaces/IUserRequest";
 import { prisma } from "../../lib/prisma";
 import { IUpdatePatientHealthDataPayload, IUpdatePatientProfilePayload } from "./patient.interface";
@@ -6,6 +7,8 @@ import { convertToDateTime } from "./patient.utils";
 
 const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfilePayload) => {
 
+
+  
     const patientData = await prisma.patient.findUniqueOrThrow({
         where: {
             email: user.email
@@ -17,7 +20,9 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
     })
 
 
-  await prisma.$transaction(async (tx) => {
+
+
+    await prisma.$transaction(async (tx) => {
 
         if (payload.patientInfo) {
             await tx.patient.update({
@@ -30,7 +35,7 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
         }
 
 
-        if (payload.patientInfo.name || payload.patientInfo.profilePhoto) {
+        if (payload.patientInfo && (payload.patientInfo.name || payload.patientInfo.profilePhoto)) {
             const userData = {
                 name: payload.patientInfo.name ? payload.patientInfo.name : patientData.name,
                 image: payload.patientInfo.profilePhoto ? payload.patientInfo.profilePhoto : patientData.profilePhoto
@@ -38,7 +43,7 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
 
             await tx.user.update({
                 where: {
-                    id: patientData.id
+                    email: patientData.email
                 }, data: {
                     ...userData
                 }
@@ -57,9 +62,10 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
                 ) as Date;
             }
 
+
             // Prisma update
             await tx.patient_Health_Data.upsert({
-                where: { id: patientData.id },
+                where: { patientId: patientData.id },
                 update: healthDataToSave,
                 create: {
                     patientId: patientData.id,
@@ -73,11 +79,17 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
             for (const report of payload.medicalReports) {
 
                 if (report.shouldDelete && report.reportId) {
-                    await tx.medicalReport.delete({
+                    const deletedReport = await tx.medicalReport.delete({
                         where: {
                             id: report.reportId
                         }
                     })
+
+                    if (deletedReport.reportLink) {
+                        await deleteFileFromCloudinary(deletedReport.reportLink)
+                    }
+
+
                 } else if (report.reportName && report.reportLink) {
                     await tx.medicalReport.create({
                         data: {
@@ -86,18 +98,8 @@ const updateMyProfile = async (user: IUserRequest, payload: IUpdatePatientProfil
                             patientId: patientData.id
                         }
                     })
-
                 }
-
-
-
-
             }
-
-
-
-
-
         }
     })
 

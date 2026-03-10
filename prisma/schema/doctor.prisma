@@ -5,7 +5,7 @@ model Doctor {
     profilePhoto  String?
     address       String?
     contactNumber String?
-    averageRating String?
+    averageRating Float @default(0.0)
 
     registrationNumber  String @unique
     experience          Int    @default(0)

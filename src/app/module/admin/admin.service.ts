@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import { prisma } from "../lib/prisma";
-import AppError from "../errorHelpers/AppError";
+import { prisma } from "../../lib/prisma";
+import AppError from "../../errorHelpers/AppError";
 import { IAdminUpdatePayload } from "./admin.interface";
-import { IUserRequest } from "../interfaces/IUserRequest";
+import { IUserRequest } from "../../interfaces/IUserRequest";
 
 
 

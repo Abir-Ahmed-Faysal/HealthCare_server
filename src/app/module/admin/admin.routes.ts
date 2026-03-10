@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { adminValidationj } from "./admin.RequestValidation";
+
 import { adminController } from "./admin.controller";
-import { validateRequest } from "../middleware/validataionRequest";
-import { authCheck } from "../middleware/authCheck";
-import { Role } from "../../generated/prisma/enums";
+import { validateRequest } from "../../middleware/validataionRequest";
+import { authCheck } from "../../middleware/authCheck";
+import { Role } from "../../../generated/prisma/enums";
+import { adminValidation } from "./admin.RequestValidation";
 
 
 const router = Router()
@@ -12,7 +13,7 @@ const router = Router()
 
 router.get('/', authCheck(Role.ADMIN, Role.SUPER_ADMIN), adminController.getAllAdmins)
 router.get('/:id', authCheck(Role.ADMIN, Role.SUPER_ADMIN), adminController.getAdmin)
-router.patch('/:id', authCheck( Role.SUPER_ADMIN), validateRequest(adminValidationj.updateDoctorValidationSchema), adminController.updateAdmin)
+router.patch('/:id', authCheck( Role.SUPER_ADMIN), validateRequest(adminValidation.updateAdminValidationSchema), adminController.updateAdmin)
 router.delete('/:id', authCheck( Role.SUPER_ADMIN), adminController.deleteAdmin)
 
 

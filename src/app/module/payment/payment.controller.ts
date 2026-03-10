@@ -4,8 +4,9 @@ import { catchAsync } from "../../shared/catchAsync"
 import { envVars } from "../../config/env"
 import { StatusCodes } from "http-status-codes"
 import { stripe } from "../../config/stripe.config"
-import { paymentService } from "./payment.service"
+
 import { sendRes } from "../../shared/sendRes"
+import { PaymentService } from "./payment.service"
 
 
 const handlerStripeWebhookEvent = catchAsync(async (req: Request, res: Response) => {
@@ -34,7 +35,7 @@ const handlerStripeWebhookEvent = catchAsync(async (req: Request, res: Response)
 
 
   try {
-    const result = await paymentService.handlerStripeWebhookEvent(event)
+    const result = await PaymentService.handlerStripeWebhookEvent(event)
 
     sendRes(res, {
       statusCode: StatusCodes.OK,

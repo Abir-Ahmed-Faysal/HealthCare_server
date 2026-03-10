@@ -9,6 +9,7 @@ import { patientService } from "./patient.service";
 const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
     const user = req.user;
     const payload = req.body
+    
 
     const result = await patientService. updateMyProfile(user as IUserRequest, payload)
 

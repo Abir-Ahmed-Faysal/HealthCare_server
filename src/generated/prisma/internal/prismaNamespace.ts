@@ -1971,7 +1971,8 @@ export const PaymentScalarFieldEnum = {
   amount: 'amount',
   transitionId: 'transitionId',
   stripeEventId: 'stripeEventId',
-  paymentGatewayDate: 'paymentGatewayDate',
+  paymentGatewayData: 'paymentGatewayData',
+  invoiceUrl: 'invoiceUrl',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1985,8 +1986,9 @@ export const PrescriptionScalarFieldEnum = {
   appointmentId: 'appointmentId',
   patientId: 'patientId',
   doctorId: 'doctorId',
-  instructions: 'instructions',
   followUpDate: 'followUpDate',
+  instructions: 'instructions',
+  pdfUrl: 'pdfUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2000,7 +2002,7 @@ export const ReviewScalarFieldEnum = {
   doctorId: 'doctorId',
   patientId: 'patientId',
   rating: 'rating',
-  review: 'review',
+  comment: 'comment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2207,6 +2209,20 @@ export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2231,20 +2247,6 @@ export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
  * Reference to a field of type 'Gender[]'
  */
 export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 

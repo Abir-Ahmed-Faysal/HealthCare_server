@@ -266,7 +266,8 @@ export const PaymentScalarFieldEnum = {
   amount: 'amount',
   transitionId: 'transitionId',
   stripeEventId: 'stripeEventId',
-  paymentGatewayDate: 'paymentGatewayDate',
+  paymentGatewayData: 'paymentGatewayData',
+  invoiceUrl: 'invoiceUrl',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -280,8 +281,9 @@ export const PrescriptionScalarFieldEnum = {
   appointmentId: 'appointmentId',
   patientId: 'patientId',
   doctorId: 'doctorId',
-  instructions: 'instructions',
   followUpDate: 'followUpDate',
+  instructions: 'instructions',
+  pdfUrl: 'pdfUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -295,7 +297,7 @@ export const ReviewScalarFieldEnum = {
   doctorId: 'doctorId',
   patientId: 'patientId',
   rating: 'rating',
-  review: 'review',
+  comment: 'comment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
